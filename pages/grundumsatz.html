@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grundumsatz & TDEE – FitRechner</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a href="../index.html" class="nav-brand">FIT<span>RECHNER</span></a>
+  <button id="nav-toggle" class="nav-toggle" aria-label="Menü"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="2" y1="6" x2="20" y2="6"/><line x1="2" y1="11" x2="20" y2="11"/><line x1="2" y1="16" x2="20" y2="16"/></svg></button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="../index.html">Startseite</a></li><li><a href="bmi.html">BMI</a></li><li><a href="grundumsatz.html">Grundumsatz</a></li><li><a href="kalorien-ziel.html">Kalorienziel</a></li><li><a href="kalorien-sport.html">Kcal Sport</a></li><li><a href="maximalkraft.html">Maximalkraft</a></li><li><a href="koerperfett.html">Körperfett</a></li><li><a href="makros.html">Makros</a></li><li><a href="wasser.html">Wasserbedarf</a></li><li><a href="pace.html">Pace &amp; Tempo</a></li><li><a href="vo2max.html">VO₂max</a></li>
+  </ul>
+</div></nav>
+
+<div class="page-header">
+  <span class="icon">🧬</span>
+  <h1>Grundumsatz &amp; <em>TDEE</em></h1>
+  <p>Basalmetabolismus (BMR) und Gesamtenergiebedarf berechnen</p>
+</div>
+
+<main>
+  <div class="card">
+    <h2>🧬 Deine Daten</h2>
+    <div class="radio-tabs">
+      <input type="radio" name="g" id="m" value="m" checked><label for="m">Männlich</label>
+      <input type="radio" name="g" id="w" value="w"><label for="w">Weiblich</label>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label for="alter">Alter (Jahre)</label><input type="number" id="alter" min="10" max="100" placeholder="30"></div>
+      <div class="field"><label for="groesse">Größe (cm)</label><input type="number" id="groesse" min="100" max="250" placeholder="178"></div>
+      <div class="field"><label for="gewicht">Gewicht (kg)</label><input type="number" id="gewicht" min="30" max="300" step="0.1" placeholder="75"></div>
+    </div>
+    <div class="field" style="margin-bottom:1.25rem">
+      <label for="aktiv">Aktivitätslevel</label>
+      <select id="aktiv">
+        <option value="1.2">Sehr wenig aktiv – kein Sport, Bürojob</option>
+        <option value="1.375">Wenig aktiv – Sport 1–3×/Woche</option>
+        <option value="1.55" selected>Mäßig aktiv – Sport 3–5×/Woche</option>
+        <option value="1.725">Sehr aktiv – Sport 6–7×/Woche</option>
+        <option value="1.9">Extrem aktiv – 2× täglich oder körperliche Arbeit</option>
+      </select>
+    </div>
+    <div class="field" style="margin-bottom:1.25rem">
+      <label for="formel">Berechnungsformel</label>
+      <select id="formel">
+        <option value="mifflin">Mifflin-St Jeor (empfohlen)</option>
+        <option value="harris">Harris-Benedict (revidiert)</option>
+        <option value="katch">Katch-McArdle (mit Körperfett)</option>
+      </select>
+    </div>
+    <div class="field" id="kf-feld" style="display:none;margin-bottom:1.25rem">
+      <label for="kf">Körperfettanteil (%)</label>
+      <input type="number" id="kf" min="3" max="60" step="0.1" placeholder="18">
+    </div>
+    <button class="btn" onclick="berechne()">Berechnen</button>
+    <div class="result" id="result">
+      <div class="result-header">📊 Dein Energiebedarf</div>
+      <div class="result-body">
+        <div class="result-main" id="tdee-val">–<small> kcal/Tag</small></div>
+        <div class="result-label">Gesamtenergiebedarf (TDEE)</div>
+        <div class="result-grid" style="margin-top:1rem">
+          <div class="result-stat"><div class="val" id="bmr-val">–</div><div class="lbl">BMR (kcal)</div></div>
+          <div class="result-stat"><div class="val" id="aktiv-val">–</div><div class="lbl">Aktivitätsfaktor</div></div>
+          <div class="result-stat"><div class="val" id="pro-meal">–</div><div class="lbl">Kcal / Mahlzeit (3×)</div></div>
+        </div>
+        <div class="info-box" style="margin-top:1rem">
+          <strong>Grundumsatz (BMR):</strong> Kalorienbedarf im völligen Ruhezustand.<br>
+          <strong>TDEE:</strong> Gesamtbedarf inkl. aller Aktivitäten – dies ist deine Erhaltungskalorien-Menge.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📋 Aktivitätslevel erklärt</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:0.88rem">
+      <thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:.5rem .75rem;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em">Level</th><th style="padding:.5rem .75rem;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em">Faktor</th><th style="text-align:left;padding:.5rem .75rem;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em">Beschreibung</th></tr></thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(138,155,181,.1)"><td style="padding:.55rem .75rem">Sedentär</td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-info">× 1,2</span></td><td style="padding:.55rem .75rem;color:var(--muted)">Kein Sport, Bürojob</td></tr>
+        <tr style="border-bottom:1px solid rgba(138,155,181,.1)"><td style="padding:.55rem .75rem">Leicht aktiv</td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-info">× 1,375</span></td><td style="padding:.55rem .75rem;color:var(--muted)">1–3× Sport/Woche</td></tr>
+        <tr style="border-bottom:1px solid rgba(138,155,181,.1)"><td style="padding:.55rem .75rem">Mäßig aktiv</td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-good">× 1,55</span></td><td style="padding:.55rem .75rem;color:var(--muted)">3–5× Sport/Woche</td></tr>
+        <tr style="border-bottom:1px solid rgba(138,155,181,.1)"><td style="padding:.55rem .75rem">Sehr aktiv</td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-warn">× 1,725</span></td><td style="padding:.55rem .75rem;color:var(--muted)">6–7× Sport/Woche</td></tr>
+        <tr><td style="padding:.55rem .75rem">Extrem aktiv</td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-danger">× 1,9</span></td><td style="padding:.55rem .75rem;color:var(--muted)">2× täglich / körperl. Arbeit</td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<footer><p>FitRechner &copy; 2025 – Keine medizinische Beratung. <a href="../index.html">Alle Rechner</a></p></footer>
+<script src="../js/nav.js"></script>
+<script>
+document.getElementById('formel').addEventListener('change', function(){
+  document.getElementById('kf-feld').style.display = this.value==='katch' ? 'flex' : 'none';
+});
+
+function berechne(){
+  const g = document.querySelector('input[name="g"]:checked').value;
+  const a = parseFloat(document.getElementById('alter').value);
+  const h = parseFloat(document.getElementById('groesse').value);
+  const w = parseFloat(document.getElementById('gewicht').value);
+  const pal = parseFloat(document.getElementById('aktiv').value);
+  const formel = document.getElementById('formel').value;
+  if(!a||!h||!w) return alert('Bitte alle Felder ausfüllen.');
+  let bmr;
+  if(formel==='mifflin'){
+    bmr = 10*w + 6.25*h - 5*a + (g==='m'?5:-161);
+  } else if(formel==='harris'){
+    bmr = g==='m' ? 88.362 + 13.397*w + 4.799*h - 5.677*a : 447.593 + 9.247*w + 3.098*h - 4.330*a;
+  } else {
+    const kf = parseFloat(document.getElementById('kf').value);
+    if(!kf) return alert('Bitte Körperfettanteil eingeben.');
+    const lbm = w * (1 - kf/100);
+    bmr = 370 + 21.6 * lbm;
+  }
+  const tdee = Math.round(bmr * pal);
+  document.getElementById('tdee-val').innerHTML = `${tdee}<small> kcal/Tag</small>`;
+  document.getElementById('bmr-val').textContent = Math.round(bmr);
+  document.getElementById('aktiv-val').textContent = '× ' + pal;
+  document.getElementById('pro-meal').textContent = Math.round(tdee/3);
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body></html>

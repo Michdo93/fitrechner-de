@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maximalkraftrechner (1RM) – FitRechner</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a href="../index.html" class="nav-brand">FIT<span>RECHNER</span></a>
+  <button id="nav-toggle" class="nav-toggle" aria-label="Menü"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="2" y1="6" x2="20" y2="6"/><line x1="2" y1="11" x2="20" y2="11"/><line x1="2" y1="16" x2="20" y2="16"/></svg></button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="../index.html">Startseite</a></li><li><a href="bmi.html">BMI</a></li><li><a href="grundumsatz.html">Grundumsatz</a></li><li><a href="kalorien-ziel.html">Kalorienziel</a></li><li><a href="kalorien-sport.html">Kcal Sport</a></li><li><a href="maximalkraft.html">Maximalkraft</a></li><li><a href="koerperfett.html">Körperfett</a></li><li><a href="makros.html">Makros</a></li><li><a href="wasser.html">Wasserbedarf</a></li><li><a href="pace.html">Pace &amp; Tempo</a></li><li><a href="vo2max.html">VO₂max</a></li>
+  </ul>
+</div></nav>
+
+<div class="page-header">
+  <span class="icon">🏋️</span>
+  <h1>Maximalkraft<em>rechner</em></h1>
+  <p>1-Wiederholungsmaximum (1RM) berechnen &amp; Trainingsgewichte ableiten</p>
+</div>
+
+<main>
+  <div class="card">
+    <h2>🏋️ Trainingsgewicht eingeben</h2>
+    <div class="form-grid">
+      <div class="field"><label for="gewicht">Gewicht (kg)</label><input type="number" id="gewicht" min="1" max="500" step="0.5" placeholder="100"></div>
+      <div class="field"><label for="wdh">Wiederholungen</label><input type="number" id="wdh" min="1" max="30" placeholder="8"></div>
+    </div>
+    <div class="field" style="margin-bottom:1.25rem">
+      <label for="formel">Berechnungsformel</label>
+      <select id="formel">
+        <option value="brzycki">Brzycki (häufig empfohlen)</option>
+        <option value="epley">Epley</option>
+        <option value="lander">Lander</option>
+        <option value="oconner">O'Conner</option>
+        <option value="mayhew">Mayhew</option>
+        <option value="mean">Durchschnitt aller Formeln</option>
+      </select>
+    </div>
+    <button class="btn" onclick="berechne()">1RM berechnen</button>
+    <div class="result" id="result">
+      <div class="result-header">💪 Dein 1RM</div>
+      <div class="result-body">
+        <div class="result-main" id="orm-val">–<small> kg</small></div>
+        <div class="result-label">Geschätztes 1-Wiederholungsmaximum</div>
+        <div style="margin-top:1.25rem;font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan);margin-bottom:.5rem">Trainingsgewichte nach Prozent</div>
+        <div class="result-grid" id="pct-grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))"></div>
+        <div class="info-box" style="margin-top:1rem">
+          <strong>Hinweis:</strong> Der 1RM-Wert ist eine Schätzung. Wähle bei 1–5 Wdh. immer eine Formel wie Brzycki – bei ≥ 10 Wdh. steigen die Abweichungen.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📋 Prozentsätze & Wiederholungen</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:.88rem">
+      <thead><tr style="border-bottom:1px solid var(--border)">
+        <th style="text-align:left;padding:.5rem .75rem;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em">% vom 1RM</th>
+        <th style="padding:.5rem .75rem;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em">~Wdh.</th>
+        <th style="text-align:left;padding:.5rem .75rem;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em">Trainingsziel</th>
+      </tr></thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(138,155,181,.1)"><td style="padding:.55rem .75rem"><span class="badge badge-danger">95–100 %</span></td><td style="padding:.55rem .75rem;text-align:center">1–2</td><td style="padding:.55rem .75rem;color:var(--muted)">Maximalkraft</td></tr>
+        <tr style="border-bottom:1px solid rgba(138,155,181,.1)"><td style="padding:.55rem .75rem"><span class="badge badge-warn">85–94 %</span></td><td style="padding:.55rem .75rem;text-align:center">3–5</td><td style="padding:.55rem .75rem;color:var(--muted)">Kraft &amp; Hypertrophie</td></tr>
+        <tr style="border-bottom:1px solid rgba(138,155,181,.1)"><td style="padding:.55rem .75rem"><span class="badge badge-good">70–84 %</span></td><td style="padding:.55rem .75rem;text-align:center">6–12</td><td style="padding:.55rem .75rem;color:var(--muted)">Muskelaufbau (Hypertrophie)</td></tr>
+        <tr style="border-bottom:1px solid rgba(138,155,181,.1)"><td style="padding:.55rem .75rem"><span class="badge badge-info">60–69 %</span></td><td style="padding:.55rem .75rem;text-align:center">13–20</td><td style="padding:.55rem .75rem;color:var(--muted)">Kraftausdauer</td></tr>
+        <tr><td style="padding:.55rem .75rem"><span class="badge badge-info">< 60 %</span></td><td style="padding:.55rem .75rem;text-align:center">> 20</td><td style="padding:.55rem .75rem;color:var(--muted)">Ausdauer / Einwärmen</td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<footer><p>FitRechner &copy; 2025 – Keine medizinische Beratung. <a href="../index.html">Alle Rechner</a></p></footer>
+<script src="../js/nav.js"></script>
+<script>
+function berechne(){
+  const w=parseFloat(document.getElementById('gewicht').value);
+  const r=parseInt(document.getElementById('wdh').value);
+  const f=document.getElementById('formel').value;
+  if(!w||!r) return alert('Bitte Gewicht und Wiederholungen eingeben.');
+  if(r===1){
+    document.getElementById('orm-val').innerHTML=`${w.toFixed(1)}<small> kg</small>`;
+    document.getElementById('result').classList.add('show');
+    renderPct(w); return;
+  }
+  let orm;
+  const brzycki = w*(36/(37-r));
+  const epley   = w*(1+r/30);
+  const lander  = (100*w)/(101.3-2.67123*r);
+  const oconner = w*(1+r/40);
+  const mayhew  = (100*w)/(52.2+41.9*Math.exp(-0.055*r));
+  if(f==='brzycki') orm=brzycki;
+  else if(f==='epley') orm=epley;
+  else if(f==='lander') orm=lander;
+  else if(f==='oconner') orm=oconner;
+  else if(f==='mayhew') orm=mayhew;
+  else orm=(brzycki+epley+lander+oconner+mayhew)/5;
+  document.getElementById('orm-val').innerHTML=`${orm.toFixed(1)}<small> kg</small>`;
+  renderPct(orm);
+  document.getElementById('result').classList.add('show');
+}
+function renderPct(orm){
+  const pcts=[[100,'1RM'],[95,'95%'],[90,'90%'],[85,'85%'],[80,'80%'],[75,'75%'],[70,'70%'],[65,'65%'],[60,'60%']];
+  const g=document.getElementById('pct-grid'); g.innerHTML='';
+  pcts.forEach(([p,l])=>{
+    const d=document.createElement('div'); d.className='result-stat';
+    d.innerHTML=`<div class="val">${(orm*p/100).toFixed(1)} <span style="font-size:.8rem;color:var(--muted)">kg</span></div><div class="lbl">${l}</div>`;
+    g.appendChild(d);
+  });
+}
+</script>
+</body></html>

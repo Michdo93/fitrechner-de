@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BMI-Rechner – FitRechner</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a href="../index.html" class="nav-brand">FIT<span>RECHNER</span></a>
+  <button id="nav-toggle" class="nav-toggle" aria-label="Menü"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="2" y1="6" x2="20" y2="6"/><line x1="2" y1="11" x2="20" y2="11"/><line x1="2" y1="16" x2="20" y2="16"/></svg></button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="../index.html">Startseite</a></li><li><a href="bmi.html">BMI</a></li><li><a href="grundumsatz.html">Grundumsatz</a></li><li><a href="kalorien-ziel.html">Kalorienziel</a></li><li><a href="kalorien-sport.html">Kcal Sport</a></li><li><a href="maximalkraft.html">Maximalkraft</a></li><li><a href="koerperfett.html">Körperfett</a></li><li><a href="makros.html">Makros</a></li><li><a href="wasser.html">Wasserbedarf</a></li><li><a href="pace.html">Pace &amp; Tempo</a></li><li><a href="vo2max.html">VO₂max</a></li>
+  </ul>
+</div></nav>
+
+<div class="page-header">
+  <span class="icon">⚖️</span>
+  <h1><em>BMI</em>-Rechner</h1>
+  <p>Body-Mass-Index berechnen &amp; einordnen</p>
+</div>
+
+<main>
+  <div class="card">
+    <h2>⚖️ Deine Daten</h2>
+    <div class="radio-tabs">
+      <input type="radio" name="g" id="m" value="m" checked><label for="m">Männlich</label>
+      <input type="radio" name="g" id="w" value="w"><label for="w">Weiblich</label>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label for="groesse">Körpergröße (cm)</label><input type="number" id="groesse" min="100" max="250" placeholder="178"></div>
+      <div class="field"><label for="gewicht">Körpergewicht (kg)</label><input type="number" id="gewicht" min="30" max="300" step="0.1" placeholder="75"></div>
+      <div class="field"><label for="alter">Alter (Jahre)</label><input type="number" id="alter" min="10" max="100" placeholder="30"></div>
+    </div>
+    <button class="btn" onclick="berechne()">BMI berechnen</button>
+    <div class="result" id="result">
+      <div class="result-header">📊 Dein Ergebnis</div>
+      <div class="result-body">
+        <div class="result-main" id="bmi-wert">–<small> kg/m²</small></div>
+        <div class="result-label" id="bmi-label"></div>
+        <div id="bmi-badge" style="margin-top:0.4rem"></div>
+        <div class="result-grid" style="margin-top:1rem">
+          <div class="result-stat"><div class="val" id="ideal-min">–</div><div class="lbl">Ideal Min (kg)</div></div>
+          <div class="result-stat"><div class="val" id="ideal-max">–</div><div class="lbl">Ideal Max (kg)</div></div>
+          <div class="result-stat"><div class="val" id="diff" style="font-size:1rem">–</div><div class="lbl">Abstand Ideal</div></div>
+        </div>
+        <div class="info-box" id="bmi-info" style="margin-top:1rem"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📋 BMI-Tabelle (WHO)</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:0.88rem">
+      <thead><tr style="border-bottom:1px solid var(--border)">
+        <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--muted);font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:.05em">Kategorie</th>
+        <th style="text-align:right;padding:0.5rem 0.75rem;color:var(--muted);font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:.05em">BMI</th>
+      </tr></thead>
+      <tbody id="bmi-table"></tbody>
+    </table>
+  </div>
+</main>
+
+<footer><p>FitRechner &copy; 2025 – Keine medizinische Beratung. <a href="../index.html">Alle Rechner</a></p></footer>
+<script src="../js/nav.js"></script>
+<script>
+const rows=[['Starkes Untergewicht','< 16','danger'],['Untergewicht','16 – 18,4','warn'],['Normalgewicht','18,5 – 24,9','good'],['Übergewicht','25 – 29,9','warn'],['Adipositas Grad I','30 – 34,9','danger'],['Adipositas Grad II','35 – 39,9','danger'],['Adipositas Grad III','≥ 40','danger']];
+const tb=document.getElementById('bmi-table');
+rows.forEach(([k,v,c])=>{const tr=document.createElement('tr');tr.style.borderBottom='1px solid rgba(138,155,181,0.1)';tr.innerHTML=`<td style="padding:.55rem .75rem">${k}</td><td style="padding:.55rem .75rem;text-align:right"><span class="badge badge-${c}">${v}</span></td>`;tb.appendChild(tr);});
+
+function berechne(){
+  const h=parseFloat(document.getElementById('groesse').value)/100;
+  const w=parseFloat(document.getElementById('gewicht').value);
+  const a=parseInt(document.getElementById('alter').value);
+  if(!h||!w||!a||h<1)return alert('Bitte alle Felder ausfüllen.');
+  const bmi=w/(h*h);
+  const iMin=(18.5*h*h).toFixed(1), iMax=(24.9*h*h).toFixed(1);
+  const diff=w-parseFloat(iMax);
+  let kat,badge,info;
+  if(bmi<16){kat='Starkes Untergewicht';badge='danger';info='Bitte ärztlichen Rat einholen.';}
+  else if(bmi<18.5){kat='Untergewicht';badge='warn';info='Kalorienreiche, ausgewogene Ernährung empfohlen.';}
+  else if(bmi<25){kat='Normalgewicht';badge='good';info='Hervorragend! Du befindest dich im gesunden Bereich.';}
+  else if(bmi<30){kat='Übergewicht';badge='warn';info='Mehr Bewegung und ausgewogene Ernährung können helfen.';}
+  else if(bmi<35){kat='Adipositas Grad I';badge='danger';info='Ärztliche Begleitung bei der Gewichtsreduktion empfohlen.';}
+  else if(bmi<40){kat='Adipositas Grad II';badge='danger';info='Erhöhtes Gesundheitsrisiko – ärztliche Beratung wichtig.';}
+  else{kat='Adipositas Grad III';badge='danger';info='Hohes Gesundheitsrisiko – bitte medizinische Unterstützung suchen.';}
+  const diffTxt=diff>0?`+${diff.toFixed(1)} kg über Idealgewicht`:diff<-1?`${Math.abs(diff).toFixed(1)} kg unter Idealgewicht`:'Im Idealbereich';
+  document.getElementById('bmi-wert').innerHTML=`${bmi.toFixed(1)}<small> kg/m²</small>`;
+  document.getElementById('bmi-label').textContent=kat;
+  document.getElementById('bmi-badge').innerHTML=`<span class="badge badge-${badge}">${kat}</span>`;
+  document.getElementById('ideal-min').textContent=iMin;
+  document.getElementById('ideal-max').textContent=iMax;
+  document.getElementById('diff').textContent=diffTxt;
+  document.getElementById('bmi-info').innerHTML=`<strong>Hinweis:</strong> ${info} Der BMI berücksichtigt keine Muskelmasse und ist bei Sportlern oft ungenau.`;
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body></html>

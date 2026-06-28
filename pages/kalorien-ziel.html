@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalorienziel-Rechner – FitRechner</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a href="../index.html" class="nav-brand">FIT<span>RECHNER</span></a>
+  <button id="nav-toggle" class="nav-toggle" aria-label="Menü"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="2" y1="6" x2="20" y2="6"/><line x1="2" y1="11" x2="20" y2="11"/><line x1="2" y1="16" x2="20" y2="16"/></svg></button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="../index.html">Startseite</a></li><li><a href="bmi.html">BMI</a></li><li><a href="grundumsatz.html">Grundumsatz</a></li><li><a href="kalorien-ziel.html">Kalorienziel</a></li><li><a href="kalorien-sport.html">Kcal Sport</a></li><li><a href="maximalkraft.html">Maximalkraft</a></li><li><a href="koerperfett.html">Körperfett</a></li><li><a href="makros.html">Makros</a></li><li><a href="wasser.html">Wasserbedarf</a></li><li><a href="pace.html">Pace &amp; Tempo</a></li><li><a href="vo2max.html">VO₂max</a></li>
+  </ul>
+</div></nav>
+
+<div class="page-header">
+  <span class="icon">🎯</span>
+  <h1>Kalorienziel<em>rechner</em></h1>
+  <p>Täglich die richtigen Kalorien für dein Ziel – abnehmen, halten oder zunehmen</p>
+</div>
+
+<main>
+  <div class="card">
+    <h2>🎯 Persönliche Daten</h2>
+    <div class="radio-tabs">
+      <input type="radio" name="g" id="m" value="m" checked><label for="m">Männlich</label>
+      <input type="radio" name="g" id="w" value="w"><label for="w">Weiblich</label>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label for="alter">Alter (Jahre)</label><input type="number" id="alter" min="10" max="100" placeholder="30"></div>
+      <div class="field"><label for="groesse">Größe (cm)</label><input type="number" id="groesse" min="100" max="250" placeholder="178"></div>
+      <div class="field"><label for="gewicht">Gewicht (kg)</label><input type="number" id="gewicht" min="30" max="300" step="0.1" placeholder="75"></div>
+      <div class="field"><label for="zielgewicht">Zielgewicht (kg)</label><input type="number" id="zielgewicht" min="30" max="300" step="0.1" placeholder="70"></div>
+    </div>
+    <div class="field" style="margin-bottom:1rem">
+      <label for="aktiv">Aktivitätslevel</label>
+      <select id="aktiv">
+        <option value="1.2">Sedentär (kein Sport)</option>
+        <option value="1.375">Leicht aktiv (1–3×/Woche)</option>
+        <option value="1.55" selected>Mäßig aktiv (3–5×/Woche)</option>
+        <option value="1.725">Sehr aktiv (6–7×/Woche)</option>
+        <option value="1.9">Extrem aktiv</option>
+      </select>
+    </div>
+    <div class="field" style="margin-bottom:1.25rem">
+      <label for="tempo">Gewichtsveränderung pro Woche</label>
+      <select id="tempo">
+        <option value="-1000">Aggressiv abnehmen (–1 kg/Woche)</option>
+        <option value="-500" selected>Moderat abnehmen (–0,5 kg/Woche)</option>
+        <option value="-250">Sanft abnehmen (–0,25 kg/Woche)</option>
+        <option value="0">Gewicht halten</option>
+        <option value="250">Langsam zunehmen (+0,25 kg/Woche)</option>
+        <option value="500">Moderat zunehmen (+0,5 kg/Woche)</option>
+      </select>
+    </div>
+    <button class="btn" onclick="berechne()">Kalorienziel berechnen</button>
+    <div class="result" id="result">
+      <div class="result-header">🎯 Dein Kalorienziel</div>
+      <div class="result-body">
+        <div class="result-main" id="ziel-val">–<small> kcal/Tag</small></div>
+        <div class="result-label" id="ziel-label"></div>
+        <div class="result-grid" style="margin-top:1rem">
+          <div class="result-stat"><div class="val" id="tdee-val">–</div><div class="lbl">TDEE (Erhaltung)</div></div>
+          <div class="result-stat"><div class="val" id="defizit-val">–</div><div class="lbl">Defizit/Überschuss</div></div>
+          <div class="result-stat"><div class="val" id="dauer-val">–</div><div class="lbl">Ziel erreicht in</div></div>
+        </div>
+        <div class="info-box" id="info-box" style="margin-top:1rem"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer><p>FitRechner &copy; 2025 – Keine medizinische Beratung. <a href="../index.html">Alle Rechner</a></p></footer>
+<script src="../js/nav.js"></script>
+<script>
+function berechne(){
+  const g=document.querySelector('input[name="g"]:checked').value;
+  const a=parseFloat(document.getElementById('alter').value);
+  const h=parseFloat(document.getElementById('groesse').value);
+  const w=parseFloat(document.getElementById('gewicht').value);
+  const zw=parseFloat(document.getElementById('zielgewicht').value);
+  const pal=parseFloat(document.getElementById('aktiv').value);
+  const delta=parseInt(document.getElementById('tempo').value);
+  if(!a||!h||!w||!zw) return alert('Bitte alle Felder ausfüllen.');
+  const bmr=10*w+6.25*h-5*a+(g==='m'?5:-161);
+  const tdee=Math.round(bmr*pal);
+  const zielKcal=tdee+delta;
+  const diffKg=zw-w;
+  const wochen=delta!==0 ? Math.abs(Math.round(diffKg/(delta/7000*7))) : 0;
+  let label=delta===0?'Gewicht halten':delta<0?`Abnehmen – ${Math.abs(delta)} kcal Defizit/Tag`:`Zunehmen – ${delta} kcal Überschuss/Tag`;
+  let info='';
+  if((zielKcal<1200&&g==="w")||(zielKcal<1500&&g==="m")) info='⚠️ Das Kalorienziel liegt sehr niedrig. Ein Minimum von 1200 kcal (Frauen) bzw. 1500 kcal (Männer) wird empfohlen.';
+  else if(delta===-1000) info='Aggressives Defizit: Nur kurzfristig empfohlen. Achte auf ausreichend Eiweiß (mind. 1,6 g/kg) um Muskelmasse zu erhalten.';
+  else info='Gutes, nachhaltiges Tempo. Kombiniere mit 1,6–2,2 g Eiweiß pro kg Körpergewicht für optimale Ergebnisse.';
+  document.getElementById('ziel-val').innerHTML=`${Math.max(zielKcal,1000)}<small> kcal/Tag</small>`;
+  document.getElementById('ziel-label').textContent=label;
+  document.getElementById('tdee-val').textContent=tdee+' kcal';
+  document.getElementById('defizit-val').textContent=(delta>=0?'+':'')+delta+' kcal';
+  document.getElementById('dauer-val').textContent=delta!==0&&diffKg!==0?(Math.abs(wochen)>52?Math.round(Math.abs(wochen)/4.33)+' Monate':Math.abs(wochen)+' Wochen'):'–';
+  document.getElementById('info-box').innerHTML=`<strong>Tipp:</strong> ${info}`;
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body></html>

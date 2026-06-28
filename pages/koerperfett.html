@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Körperfettanteil – FitRechner</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a href="../index.html" class="nav-brand">FIT<span>RECHNER</span></a>
+  <button id="nav-toggle" class="nav-toggle" aria-label="Menü"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="2" y1="6" x2="20" y2="6"/><line x1="2" y1="11" x2="20" y2="11"/><line x1="2" y1="16" x2="20" y2="16"/></svg></button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="../index.html">Startseite</a></li><li><a href="bmi.html">BMI</a></li><li><a href="grundumsatz.html">Grundumsatz</a></li><li><a href="kalorien-ziel.html">Kalorienziel</a></li><li><a href="kalorien-sport.html">Kcal Sport</a></li><li><a href="maximalkraft.html">Maximalkraft</a></li><li><a href="koerperfett.html">Körperfett</a></li><li><a href="makros.html">Makros</a></li><li><a href="wasser.html">Wasserbedarf</a></li><li><a href="pace.html">Pace &amp; Tempo</a></li><li><a href="vo2max.html">VO₂max</a></li>
+  </ul>
+</div></nav>
+
+<div class="page-header">
+  <span class="icon">📐</span>
+  <h1>Körperfett<em>anteil</em></h1>
+  <p>US-Navy-Methode – Berechnung ohne Waage, nur mit Maßband</p>
+</div>
+
+<main>
+  <div class="card">
+    <h2>📐 Körpermaße eingeben</h2>
+    <div class="radio-tabs">
+      <input type="radio" name="g" id="m" value="m" checked><label for="m">Männlich</label>
+      <input type="radio" name="g" id="w" value="w"><label for="w">Weiblich</label>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label for="groesse">Körpergröße (cm)</label><input type="number" id="groesse" min="100" max="250" placeholder="178"></div>
+      <div class="field"><label for="hals">Halsumfang (cm)</label><input type="number" id="hals" min="20" max="70" step="0.5" placeholder="38"></div>
+      <div class="field"><label for="bauch">Bauchumfang (cm)</label><input type="number" id="bauch" min="40" max="200" step="0.5" placeholder="85"></div>
+      <div class="field" id="hueft-feld" style="display:none"><label for="hueft">Hüftumfang (cm)</label><input type="number" id="hueft" min="40" max="200" step="0.5" placeholder="95"></div>
+    </div>
+    <div class="info-box" style="margin-bottom:1.25rem">
+      <strong>Messpunkte:</strong> Hals: engste Stelle. Bauch: Männer – Bauchnabel; Frauen – breiteste Stelle. Hüfte (nur Frauen): breiteste Stelle.
+    </div>
+    <button class="btn" onclick="berechne()">Körperfett berechnen</button>
+    <div class="result" id="result">
+      <div class="result-header">📊 Körperfettanteil</div>
+      <div class="result-body">
+        <div class="result-main" id="kf-val">–<small> %</small></div>
+        <div class="result-label" id="kf-label"></div>
+        <div id="kf-badge" style="margin-top:.4rem"></div>
+        <div class="result-grid" style="margin-top:1rem">
+          <div class="result-stat"><div class="val" id="fett-kg">–</div><div class="lbl">Fettmasse (kg)*</div></div>
+          <div class="result-stat"><div class="val" id="lean-kg">–</div><div class="lbl">Magermasse (kg)*</div></div>
+          <div class="result-stat"><div class="val" id="ziel-kf">–</div><div class="lbl">Ziel Fettanteil</div></div>
+        </div>
+        <div class="info-box" style="margin-top:1rem">* Nur berechenbar wenn Körpergewicht bekannt. <strong>Eingabe:</strong> <input type="number" id="gewicht" style="width:80px;display:inline" placeholder="75 kg" min="30" max="300" step=".1"> kg <button onclick="calcFettKg()" style="background:var(--cyan);color:var(--bg);border:none;border-radius:4px;padding:.2rem .6rem;cursor:pointer;font-size:.85rem;font-weight:600">Berechnen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📋 Normwerte Körperfett</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:.88rem">
+      <thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:.5rem .75rem;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em">Kategorie</th><th style="padding:.5rem .75rem;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em">Männer</th><th style="padding:.5rem .75rem;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em">Frauen</th></tr></thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(138,155,181,.1)"><td style="padding:.55rem .75rem">Essentiell</td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-info">2–5 %</span></td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-info">10–13 %</span></td></tr>
+        <tr style="border-bottom:1px solid rgba(138,155,181,.1)"><td style="padding:.55rem .75rem">Athletisch</td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-good">6–13 %</span></td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-good">14–20 %</span></td></tr>
+        <tr style="border-bottom:1px solid rgba(138,155,181,.1)"><td style="padding:.55rem .75rem">Fit</td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-good">14–17 %</span></td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-good">21–24 %</span></td></tr>
+        <tr style="border-bottom:1px solid rgba(138,155,181,.1)"><td style="padding:.55rem .75rem">Durchschnittlich</td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-warn">18–24 %</span></td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-warn">25–31 %</span></td></tr>
+        <tr><td style="padding:.55rem .75rem">Übergewichtig</td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-danger">> 25 %</span></td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-danger">> 32 %</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<footer><p>FitRechner &copy; 2025 – Keine medizinische Beratung. <a href="../index.html">Alle Rechner</a></p></footer>
+<script src="../js/nav.js"></script>
+<script>
+let globalKF=0, globalG='m';
+document.querySelector('input[name="g"][value="m"]').addEventListener('change',()=>{document.getElementById('hueft-feld').style.display='none';});
+document.querySelector('input[name="g"][value="w"]').addEventListener('change',()=>{document.getElementById('hueft-feld').style.display='flex';});
+
+function berechne(){
+  const g=document.querySelector('input[name="g"]:checked').value;
+  const h=parseFloat(document.getElementById('groesse').value);
+  const neck=parseFloat(document.getElementById('hals').value);
+  const belly=parseFloat(document.getElementById('bauch').value);
+  const hip=parseFloat(document.getElementById('hueft')?.value||0);
+  if(!h||!neck||!belly||(g==='w'&&!hip)) return alert('Bitte alle Maße eingeben.');
+  let kf;
+  if(g==='m'){kf=86.01*Math.log10(belly-neck)-70.041*Math.log10(h)+36.76;}
+  else{kf=163.205*Math.log10(belly+hip-neck)-97.684*Math.log10(h)-78.387;}
+  globalKF=kf; globalG=g;
+  let kat,badge,ziel;
+  if(g==='m'){
+    if(kf<6){kat='Essentiell';badge='info';ziel='6–13 %';}
+    else if(kf<14){kat='Athletisch';badge='good';ziel='6–13 %';}
+    else if(kf<18){kat='Fit';badge='good';ziel='14–17 %';}
+    else if(kf<25){kat='Durchschnittlich';badge='warn';ziel='14–17 %';}
+    else{kat='Übergewichtig';badge='danger';ziel='< 25 %';}
+  } else {
+    if(kf<14){kat='Essentiell';badge='info';ziel='14–20 %';}
+    else if(kf<21){kat='Athletisch';badge='good';ziel='14–20 %';}
+    else if(kf<25){kat='Fit';badge='good';ziel='21–24 %';}
+    else if(kf<32){kat='Durchschnittlich';badge='warn';ziel='21–24 %';}
+    else{kat='Übergewichtig';badge='danger';ziel='< 32 %';}
+  }
+  document.getElementById('kf-val').innerHTML=`${kf.toFixed(1)}<small> %</small>`;
+  document.getElementById('kf-label').textContent=kat;
+  document.getElementById('kf-badge').innerHTML=`<span class="badge badge-${badge}">${kat}</span>`;
+  document.getElementById('ziel-kf').textContent=ziel;
+  document.getElementById('fett-kg').textContent='?';
+  document.getElementById('lean-kg').textContent='?';
+  document.getElementById('result').classList.add('show');
+}
+function calcFettKg(){
+  const bw=parseFloat(document.getElementById('gewicht').value);
+  if(!bw||!globalKF) return;
+  const fett=(bw*globalKF/100).toFixed(1);
+  const lean=(bw-fett).toFixed(1);
+  document.getElementById('fett-kg').textContent=fett+' kg';
+  document.getElementById('lean-kg').textContent=lean+' kg';
+}
+</script>
+</body></html>

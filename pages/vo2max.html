@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VO₂max Schätzer – FitRechner</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a href="../index.html" class="nav-brand">FIT<span>RECHNER</span></a>
+  <button id="nav-toggle" class="nav-toggle" aria-label="Menü"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="2" y1="6" x2="20" y2="6"/><line x1="2" y1="11" x2="20" y2="11"/><line x1="2" y1="16" x2="20" y2="16"/></svg></button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="../index.html">Startseite</a></li><li><a href="bmi.html">BMI</a></li><li><a href="grundumsatz.html">Grundumsatz</a></li><li><a href="kalorien-ziel.html">Kalorienziel</a></li><li><a href="kalorien-sport.html">Kcal Sport</a></li><li><a href="maximalkraft.html">Maximalkraft</a></li><li><a href="koerperfett.html">Körperfett</a></li><li><a href="makros.html">Makros</a></li><li><a href="wasser.html">Wasserbedarf</a></li><li><a href="pace.html">Pace &amp; Tempo</a></li><li><a href="vo2max.html">VO₂max</a></li>
+  </ul>
+</div></nav>
+
+<div class="page-header">
+  <span class="icon">🫁</span>
+  <h1>VO₂max <em>Schätzer</em></h1>
+  <p>Maximale Sauerstoffaufnahme schätzen – ohne Labor</p>
+</div>
+
+<main>
+  <div class="card">
+    <h2>🫁 Methode wählen</h2>
+    <div class="field" style="margin-bottom:1.25rem">
+      <label for="methode">Berechnungsmethode</label>
+      <select id="methode" onchange="showPanel()">
+        <option value="hf">Herzfrequenz-Methode (Ruhe & Max)</option>
+        <option value="cooper">Cooper-Test (12-Minuten-Lauf)</option>
+        <option value="rockport">Rockport Walking Test (1,6 km Gehtest)</option>
+        <option value="pace">Pace-Methode (aus Wettkampfzeit)</option>
+      </select>
+    </div>
+
+    <div id="panel-hf">
+      <div class="info-box" style="margin-bottom:1rem">Miss deine <strong>Ruheherzfrequenz</strong> morgens im Liegen (3 Min. messen) und schätze deine <strong>maximale Herzfrequenz</strong> (Formel: 220 − Alter, oder beim Maximaltest gemessener Wert).
+      </div>
+      <div class="form-grid">
+        <div class="field"><label for="hf-ruhe">Ruhepuls (bpm)</label><input type="number" id="hf-ruhe" min="30" max="100" placeholder="55"></div>
+        <div class="field"><label for="hf-max">Max. Herzfrequenz (bpm)</label><input type="number" id="hf-max" min="100" max="220" placeholder="190"></div>
+        <div class="field"><label for="hf-alter">Alter (Jahre)</label><input type="number" id="hf-alter" min="10" max="100" placeholder="30"></div>
+      </div>
+    </div>
+
+    <div id="panel-cooper" style="display:none">
+      <div class="info-box" style="margin-bottom:1rem">Laufe exakt <strong>12 Minuten</strong> so weit wie möglich. Messe danach die zurückgelegte Distanz in Metern.
+      </div>
+      <div class="form-grid">
+        <div class="field"><label for="coop-dist">Zurückgelegte Distanz (m)</label><input type="number" id="coop-dist" min="500" max="5000" placeholder="2400"></div>
+      </div>
+    </div>
+
+    <div id="panel-rockport" style="display:none">
+      <div class="info-box" style="margin-bottom:1rem">Gehe <strong>1,6 km (eine Meile) so schnell wie möglich</strong>. Miss Herzfrequenz direkt nach Abschluss und Zeit in Minuten.
+      </div>
+      <div class="radio-tabs" style="margin-bottom:1rem">
+        <input type="radio" name="rg" id="rm" value="m" checked><label for="rm">Männlich</label>
+        <input type="radio" name="rg" id="rw" value="w"><label for="rw">Weiblich</label>
+      </div>
+      <div class="form-grid">
+        <div class="field"><label for="rp-alter">Alter (Jahre)</label><input type="number" id="rp-alter" min="10" max="100" placeholder="30"></div>
+        <div class="field"><label for="rp-gewicht">Gewicht (kg)</label><input type="number" id="rp-gewicht" min="30" max="200" step=".1" placeholder="75"></div>
+        <div class="field"><label for="rp-min">Zeit – Minuten</label><input type="number" id="rp-min" min="8" max="30" placeholder="14"></div>
+        <div class="field"><label for="rp-sec">Zeit – Sekunden</label><input type="number" id="rp-sec" min="0" max="59" placeholder="30"></div>
+        <div class="field"><label for="rp-hf">Herzfrequenz direkt danach (bpm)</label><input type="number" id="rp-hf" min="60" max="220" placeholder="155"></div>
+      </div>
+    </div>
+
+    <div id="panel-pace" style="display:none">
+      <div class="info-box" style="margin-bottom:1rem">Gib deine <strong>Wettkampf-Bestzeit</strong> auf einer Distanz ein. Funktioniert am besten mit 5 km oder 10 km Ergebnissen.
+      </div>
+      <div class="form-grid">
+        <div class="field"><label for="p-dist">Distanz (km)</label><input type="number" id="p-dist" min="1" max="42.2" step=".001" placeholder="10"></div>
+        <div class="field"><label for="p-h">Stunden</label><input type="number" id="p-h" min="0" max="6" placeholder="0"></div>
+        <div class="field"><label for="p-min">Minuten</label><input type="number" id="p-min" min="0" max="59" placeholder="48"></div>
+        <div class="field"><label for="p-sec">Sekunden</label><input type="number" id="p-sec" min="0" max="59" placeholder="0"></div>
+      </div>
+    </div>
+
+    <button class="btn" onclick="berechne()" style="margin-top:.25rem">VO₂max schätzen</button>
+    <div class="result" id="result">
+      <div class="result-header">🫁 Dein VO₂max</div>
+      <div class="result-body">
+        <div class="result-main" id="vo2-val">–<small> ml/kg/min</small></div>
+        <div id="vo2-badge" style="margin-top:.4rem"></div>
+        <div class="result-label" id="vo2-label" style="margin-top:.4rem"></div>
+        <div class="result-grid" style="margin-top:1rem">
+          <div class="result-stat"><div class="val" id="vo2-kat">–</div><div class="lbl">Kategorie</div></div>
+          <div class="result-stat"><div class="val" id="vo2-pct">–</div><div class="lbl">Besser als ca.</div></div>
+        </div>
+        <div class="info-box" style="margin-top:1rem">
+          <strong>Hinweis:</strong> VO₂max-Schätzungen ohne Labor haben eine Abweichung von ±10–15 %. Für präzise Werte ist ein Spiroergometrie-Test notwendig. Genetik und Trainingsalter beeinflussen den Wert stark.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📋 VO₂max Normwerte</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:.88rem">
+      <thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:.5rem .75rem;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em">Kategorie</th><th style="padding:.5rem .75rem;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em">Männer 30–39 J.</th><th style="padding:.5rem .75rem;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em">Frauen 30–39 J.</th></tr></thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(138,155,181,.1)"><td style="padding:.55rem .75rem">Sehr gut</td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-good">> 52</span></td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-good">> 45</span></td></tr>
+        <tr style="border-bottom:1px solid rgba(138,155,181,.1)"><td style="padding:.55rem .75rem">Gut</td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-good">43–52</span></td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-good">37–45</span></td></tr>
+        <tr style="border-bottom:1px solid rgba(138,155,181,.1)"><td style="padding:.55rem .75rem">Durchschnittlich</td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-warn">35–43</span></td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-warn">30–37</span></td></tr>
+        <tr><td style="padding:.55rem .75rem">Unter Durchschnitt</td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-danger">< 35</span></td><td style="padding:.55rem .75rem;text-align:center"><span class="badge badge-danger">< 30</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<footer><p>FitRechner &copy; 2025 – Keine medizinische Beratung. <a href="../index.html">Alle Rechner</a></p></footer>
+<script src="../js/nav.js"></script>
+<script>
+function showPanel(){
+  const m=document.getElementById('methode').value;
+  ['hf','cooper','rockport','pace'].forEach(p=>{
+    document.getElementById('panel-'+p).style.display=p===m?'block':'none';
+  });
+}
+
+function berechne(){
+  const m=document.getElementById('methode').value;
+  let vo2;
+  if(m==='hf'){
+    const ru=parseFloat(document.getElementById('hf-ruhe').value);
+    const mx=parseFloat(document.getElementById('hf-max').value)||220-parseFloat(document.getElementById('hf-alter').value);
+    if(!ru||!mx) return alert('Bitte Ruhepuls und Max-HF eingeben.');
+    vo2=15*(mx/ru); // Uth et al.
+  } else if(m==='cooper'){
+    const d=parseFloat(document.getElementById('coop-dist').value);
+    if(!d) return alert('Bitte Distanz eingeben.');
+    vo2=(d-504.9)/44.73;
+  } else if(m==='rockport'){
+    const rg=document.querySelector('input[name="rg"]:checked').value;
+    const a=parseFloat(document.getElementById('rp-alter').value);
+    const bw=parseFloat(document.getElementById('rp-gewicht').value);
+    const mi=parseFloat(document.getElementById('rp-min').value)||0;
+    const si=parseFloat(document.getElementById('rp-sec').value)||0;
+    const hf=parseFloat(document.getElementById('rp-hf').value);
+    if(!a||!bw||!hf) return alert('Bitte alle Felder ausfüllen.');
+    const tMin=mi+si/60;
+    const bwLbs=bw*2.20462;
+    const sex=rg==='m'?1:0;
+    vo2=132.853-0.0769*bwLbs-0.3877*a+6.315*sex-3.2649*tMin-0.1565*hf;
+  } else {
+    const d=parseFloat(document.getElementById('p-dist').value);
+    const h=parseFloat(document.getElementById('p-h').value)||0;
+    const mi=parseFloat(document.getElementById('p-min').value)||0;
+    const si=parseFloat(document.getElementById('p-sec').value)||0;
+    const tMin=h*60+mi+si/60;
+    if(!d||!tMin) return alert('Bitte Distanz und Zeit eingeben.');
+    const vKmH=d/tMin*60;
+    // Jack Daniels VDOT vereinfacht
+    const pctMax=-4.60+0.182258*vKmH+0.000104*vKmH*vKmH;
+    const vo2atSpeed=vKmH/60*1000*(0.182258+0.000104*vKmH);
+    vo2=vo2atSpeed/pctMax;
+  }
+  let kat,badge,pct;
+  if(vo2>=60){kat='Elite / Weltklasse';badge='good';pct='> 99 %';}
+  else if(vo2>=52){kat='Sehr gut';badge='good';pct='~90 %';}
+  else if(vo2>=43){kat='Gut';badge='good';pct='~70 %';}
+  else if(vo2>=35){kat='Durchschnittlich';badge='warn';pct='~50 %';}
+  else if(vo2>=25){kat='Unterdurchschnittlich';badge='warn';pct='~30 %';}
+  else{kat='Schlecht';badge='danger';pct='< 20 %';}
+  document.getElementById('vo2-val').innerHTML=`${vo2.toFixed(1)}<small> ml/kg/min</small>`;
+  document.getElementById('vo2-badge').innerHTML=`<span class="badge badge-${badge}">${kat}</span>`;
+  document.getElementById('vo2-label').textContent=`Geschätzter VO₂max-Wert (${['hf','cooper','rockport','pace'].indexOf(m)>=0?['Herzfrequenz','Cooper','Rockport','Pace'][['hf','cooper','rockport','pace'].indexOf(m)]:''}-Methode)`;
+  document.getElementById('vo2-kat').textContent=kat;
+  document.getElementById('vo2-pct').textContent=pct;
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body></html>

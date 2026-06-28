@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FitRechner – Fitness & Ernährungs-Rechner</title>
+<meta name="description" content="Kostenlose Fitness-Rechner: BMI, Kalorien, Maximalkraft, Körperfett, Pace und mehr – alles auf einen Blick.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">FIT<span>RECHNER</span></a>
+    <button id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="2" y1="6" x2="20" y2="6"/><line x1="2" y1="11" x2="20" y2="11"/><line x1="2" y1="16" x2="20" y2="16"/>
+      </svg>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Startseite</a></li>
+      <li><a href="pages/bmi.html">BMI</a></li>
+      <li><a href="pages/grundumsatz.html">Grundumsatz</a></li>
+      <li><a href="pages/kalorien-ziel.html">Kalorienziel</a></li>
+      <li><a href="pages/kalorien-sport.html">Kcal Sport</a></li>
+      <li><a href="pages/maximalkraft.html">Maximalkraft</a></li>
+      <li><a href="pages/koerperfett.html">Körperfett</a></li>
+      <li><a href="pages/makros.html">Makros</a></li>
+      <li><a href="pages/wasser.html">Wasserbedarf</a></li>
+      <li><a href="pages/pace.html">Pace & Tempo</a></li>
+      <li><a href="pages/vo2max.html">VO₂max</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-header">
+  <span class="icon">⚡</span>
+  <h1>FIT<em>RECHNER</em></h1>
+  <p>Deine Sammlung für Fitness &amp; Ernährungs-Berechnungen – alles kostenlos, keine Anmeldung</p>
+</div>
+
+<main>
+  <div class="cat-label">💪 Kraft &amp; Leistung</div>
+  <div class="app-grid">
+    <a href="pages/maximalkraft.html" class="app-card">
+      <div class="app-icon">🏋️</div>
+      <div class="app-name">Maximalkraftrechner (1RM)</div>
+      <div class="app-desc">Berechne deine maximale Einwiederholungslast aus Trainingsgewicht und Wiederholungszahl.</div>
+      <div class="app-tag">Kraft</div>
+    </a>
+    <a href="pages/vo2max.html" class="app-card">
+      <div class="app-icon">🫁</div>
+      <div class="app-name">VO₂max Schätzer</div>
+      <div class="app-desc">Schätze deine maximale Sauerstoffaufnahme anhand von Herzfrequenz und Belastung.</div>
+      <div class="app-tag">Ausdauer</div>
+    </a>
+    <a href="pages/pace.html" class="app-card">
+      <div class="app-icon">🏃</div>
+      <div class="app-name">Pace &amp; Durchschnittstempo</div>
+      <div class="app-desc">Pace, Geschwindigkeit, Zielzeit oder Distanz – alle Sportarten: Laufen, Radfahren, Schwimmen...</div>
+      <div class="app-tag">Sport</div>
+    </a>
+  </div>
+
+  <div class="cat-label">🔥 Kalorien &amp; Energie</div>
+  <div class="app-grid">
+    <a href="pages/grundumsatz.html" class="app-card">
+      <div class="app-icon">🧬</div>
+      <div class="app-name">Grundumsatz &amp; TDEE</div>
+      <div class="app-desc">Berechne deinen Ruheenergiebedarf (BMR) und Gesamtenergiebedarf (TDEE) nach Aktivitätslevel.</div>
+      <div class="app-tag">Ernährung</div>
+    </a>
+    <a href="pages/kalorien-ziel.html" class="app-card">
+      <div class="app-icon">🎯</div>
+      <div class="app-name">Kalorienziel-Rechner</div>
+      <div class="app-desc">Wie viel solltest du essen um abzunehmen, Muskeln aufzubauen oder dein Gewicht zu halten?</div>
+      <div class="app-tag">Ernährung</div>
+    </a>
+    <a href="pages/kalorien-sport.html" class="app-card">
+      <div class="app-icon">🚴</div>
+      <div class="app-name">Kalorienverbrauch Sport</div>
+      <div class="app-desc">Wie viele Kalorien verbrennst du bei welcher Sportart und Intensität?</div>
+      <div class="app-tag">Sport</div>
+    </a>
+  </div>
+
+  <div class="cat-label">📊 Körperwerte</div>
+  <div class="app-grid">
+    <a href="pages/bmi.html" class="app-card">
+      <div class="app-icon">⚖️</div>
+      <div class="app-name">BMI-Rechner</div>
+      <div class="app-desc">Body-Mass-Index berechnen inklusive Einordnung und Zielgewichtsempfehlung.</div>
+      <div class="app-tag">Körper</div>
+    </a>
+    <a href="pages/koerperfett.html" class="app-card">
+      <div class="app-icon">📐</div>
+      <div class="app-name">Körperfettanteil</div>
+      <div class="app-desc">Körperfett berechnen mit der US-Navy-Methode anhand von Körpermaßen – ohne Waage.</div>
+      <div class="app-tag">Körper</div>
+    </a>
+    <a href="pages/makros.html" class="app-card">
+      <div class="app-icon">🥗</div>
+      <div class="app-name">Makronährstoff-Rechner</div>
+      <div class="app-desc">Optimale Eiweiß-, Kohlenhydrat- und Fettverteilung je nach Ziel und Körpergewicht.</div>
+      <div class="app-tag">Ernährung</div>
+    </a>
+    <a href="pages/wasser.html" class="app-card">
+      <div class="app-icon">💧</div>
+      <div class="app-name">Tageswasserbedarf</div>
+      <div class="app-desc">Wie viel solltest du täglich trinken? Mit Sport- und Klimafaktor.</div>
+      <div class="app-tag">Ernährung</div>
+    </a>
+  </div>
+</main>
+
+<footer>
+  <p>FitRechner &copy; 2025 – Alle Angaben ohne Gewähr. Kein Ersatz für medizinische Beratung.</p>
+</footer>
+
+<script src="js/nav.js"></script>
+</body>
+</html>
